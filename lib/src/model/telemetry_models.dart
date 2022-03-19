@@ -290,7 +290,7 @@ class JsonDataEntry extends BasicKvEntry {
   dynamic getValue() => value;
 
   @override
-  String getValueAsString() => value;
+  String getValueAsString() => value.toString();
 
   @override
   String toString() {
