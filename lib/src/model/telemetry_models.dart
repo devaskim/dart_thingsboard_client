@@ -320,7 +320,7 @@ abstract class RestJsonConverter {
   static final String CAN_T_PARSE_VALUE = 'Can\'t parse value: ';
 
   static Map<String, AttributeKvEntry> toAttributes(List<dynamic>? attributes) {
-    if (attributes != null && attributes.isNotEmpty) {
+    if (attributes == null || attributes.isEmpty) {
       return {};
     }
 
