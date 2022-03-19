@@ -319,15 +319,18 @@ abstract class RestJsonConverter {
 
   static final String CAN_T_PARSE_VALUE = 'Can\'t parse value: ';
 
-  static List<AttributeKvEntry> toAttributes(List<dynamic>? attributes) {
+  static Map<String, AttributeKvEntry> toAttributes(List<dynamic>? attributes) {
     if (attributes != null && attributes.isNotEmpty) {
-      return attributes.map((attr) {
-        var entry = _parseValue(attr[KEY] as String, attr[VALUE]);
-        return BaseAttributeKvEntry(entry, attr[LAST_UPDATE_TS] as int);
-      }).toList();
-    } else {
-      return [];
+      return {};
     }
+
+    var attributesMap = <String, AttributeKvEntry>{};
+    for (var attr in attributes!) {
+      var entry = _parseValue(attr[KEY] as String, attr[VALUE]);
+      var kvEntry = BaseAttributeKvEntry(entry, attr[LAST_UPDATE_TS] as int);
+      attributesMap[kvEntry.getKey()] = kvEntry;
+    }
+    return attributesMap;
   }
 
   static List<TsKvEntry> toTimeseries(Map<String, dynamic>? timeseries) {
