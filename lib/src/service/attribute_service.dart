@@ -29,7 +29,7 @@ class AttributeService {
     return response.data!;
   }
 
-  Future<List<AttributeKvEntry>> getAttributeKvEntries(
+  Future<Map<String, AttributeKvEntry>> getAttributeKvEntries(
       EntityId entityId, List<String> keys,
       {RequestConfig? requestConfig}) async {
     var response = await _tbClient.get<List<dynamic>>(
@@ -39,7 +39,7 @@ class AttributeService {
     return RestJsonConverter.toAttributes(response.data);
   }
 
-  Future<List<AttributeKvEntry>> getAttributesByScope(
+  Future<Map<String, AttributeKvEntry>> getAttributesByScope(
       EntityId entityId, String scope, List<String> keys,
       {RequestConfig? requestConfig}) async {
     var response = await _tbClient.get<List<dynamic>>(
