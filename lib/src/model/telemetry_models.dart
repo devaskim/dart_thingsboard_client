@@ -33,7 +33,7 @@ abstract class KvEntry {
 
   double? getDoubleValue();
 
-  String? getJsonValue();
+  Map<String, dynamic>? getJsonValue();
 
   String getValueAsString();
 
@@ -78,7 +78,7 @@ class BaseAttributeKvEntry implements AttributeKvEntry {
   double? getDoubleValue() => kv.getDoubleValue();
 
   @override
-  String? getJsonValue() => kv.getJsonValue();
+  Map<String, dynamic>? getJsonValue() => kv.getJsonValue();
 
   @override
   String getValueAsString() => kv.getValueAsString();
@@ -122,7 +122,7 @@ class BasicTsKvEntry implements TsKvEntry {
   double? getDoubleValue() => kv.getDoubleValue();
 
   @override
-  String? getJsonValue() => kv.getJsonValue();
+  Map<String, dynamic>? getJsonValue() => kv.getJsonValue();
 
   @override
   String getValueAsString() => kv.getValueAsString();
@@ -175,7 +175,7 @@ abstract class BasicKvEntry implements KvEntry {
   double? getDoubleValue() => null;
 
   @override
-  String? getJsonValue() => null;
+  Map<String, dynamic>? getJsonValue() => null;
 
   @override
   String toString() {
@@ -276,7 +276,7 @@ class DoubleDataEntry extends BasicKvEntry {
 }
 
 class JsonDataEntry extends BasicKvEntry {
-  final String value;
+  final Map<String, dynamic> value;
 
   JsonDataEntry(String key, this.value) : super(key);
 
@@ -284,7 +284,7 @@ class JsonDataEntry extends BasicKvEntry {
   DataType getDataType() => DataType.JSON;
 
   @override
-  String? getJsonValue() => value;
+  Map<String, dynamic>? getJsonValue() => value;
 
   @override
   dynamic getValue() => value;
@@ -347,20 +347,18 @@ abstract class RestJsonConverter {
   }
 
   static KvEntry _parseValue(String key, dynamic value) {
-    if (!(value is Map)) {
-      if (value is bool) {
-        return BooleanDataEntry(key, value);
-      } else if (value is num) {
-        return _parseNumericValue(key, value);
-      } else if (value is String) {
-        return StringDataEntry(key, value);
-      } else {
-        throw ThingsboardError(
-            message: CAN_T_PARSE_VALUE + value,
-            errorCode: ThingsBoardErrorCode.invalidArguments);
-      }
+    if (value is Map) {
+	  return JsonDataEntry(key, value.cast<String, dynamic>());
+	} else if (value is bool) {
+      return BooleanDataEntry(key, value);
+    } else if (value is num) {
+      return _parseNumericValue(key, value);
+    } else if (value is String) {
+      return StringDataEntry(key, value);
     } else {
-      return JsonDataEntry(key, value.toString());
+      throw ThingsboardError(
+          message: CAN_T_PARSE_VALUE + value,
+          errorCode: ThingsBoardErrorCode.invalidArguments);
     }
   }
 
