@@ -323,9 +323,8 @@ abstract class RestJsonConverter {
     if (attributes == null || attributes.isEmpty) {
       return {};
     }
-
     var attributesMap = <String, AttributeKvEntry>{};
-    for (var attr in attributes!) {
+    for (var attr in attributes) {
       var entry = _parseValue(attr[KEY] as String, attr[VALUE]);
       var kvEntry = BaseAttributeKvEntry(entry, attr[LAST_UPDATE_TS] as int);
       attributesMap[kvEntry.getKey()] = kvEntry;
